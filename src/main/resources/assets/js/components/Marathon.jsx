@@ -8,6 +8,7 @@ define([
   "models/AppCollection",
   "models/DeploymentCollection",
   "jsx!components/AppListComponent",
+  "jsx!components/GroupsListComponent",
   "jsx!components/modals/AboutModalComponent",
   "jsx!components/AppModalComponent",
   "jsx!components/DeploymentsListComponent",
@@ -16,7 +17,7 @@ define([
   "jsx!components/TogglableTabsComponent",
   "jsx!components/NavTabsComponent"
 ], function(Mousetrap, React, _, States, AppCollection, DeploymentCollection,
-    AppListComponent, AboutModalComponent, AppModalComponent,
+    AppListComponent, GroupsListComponent, AboutModalComponent, AppModalComponent,
     DeploymentsListComponent, NewAppModalComponent, TabPaneComponent,
     TogglableTabsComponent, NavTabsComponent) {
 
@@ -26,6 +27,7 @@ define([
 
   var tabs = [
     {id: "apps", text: "Apps"},
+    {id: "groups", text: "Groups"},
     {id: "deployments", text: "Deployments"}
   ];
 
@@ -136,6 +138,10 @@ define([
           }.bind(this)
         });
       }
+    },
+
+    fetchGroups: function() {
+      console.log("ello");
     },
 
     fetchDeployments: function() {
@@ -367,8 +373,14 @@ define([
       });
 
       if (id === tabs[0].id) {
-        this.setPollResource(this.fetchApps);
-      } else if (id === tabs[1].id) {
+        return this.setPollResource(this.fetchApps);
+      }
+
+      if (id === tabs[1].id) {
+        this.setPollResource(this.fetchGroups);
+      }
+
+      if (id === tabs[2].id) {
         this.setPollResource(this.fetchDeployments);
       }
     },
@@ -452,6 +464,11 @@ define([
                   onSelectApp={this.showAppModal}
                   fetchState={this.state.fetchState}
                   ref="appList" />
+              </TabPaneComponent>
+              <TabPaneComponent
+                  id="groups"
+              >
+                <GroupsListComponent></GroupsListComponent>
               </TabPaneComponent>
               <TabPaneComponent
                   id="deployments"
